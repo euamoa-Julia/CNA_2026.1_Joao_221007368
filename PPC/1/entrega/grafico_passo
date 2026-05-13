@@ -1,0 +1,23 @@
+set terminal pngcairo size 800,600 enhanced font 'Arial,12'
+set output 'grafico_passo.png'
+
+# Título do gráfico
+set title "Perfil de Velocidade (Re=0) para Diferentes Passos"
+
+# Rótulos dos eixos (Escala de tempo e velocidade)
+set xlabel "Tempo adimensional (t^*)"
+set ylabel "Velocidade adimensional (v_z^*)"
+
+# Configuração da grade de fundo
+set grid
+
+# Posição da legenda
+set key bottom right box
+
+# Comando principal de plotagem
+# O "lw 2" (line width)
+# O "lc rgb" (line color)
+plot "dados_velocidade_Re0_h001.dat" using 1:2 with lines lw 2 lc rgb "#00FFFF" title "h = 0.01", \
+     "dados_velocidade_0.dat" using 1:2 with lines lw 2 lc rgb "#20B2AA" title "h = 0.1", \
+     "dados_velocidade_Re0_h050.dat" using 1:2 with lines lw 2 lc rgb "#FFD700" title "h = 0.5", \
+     "dados_velocidade_Re0_h100.dat" using 1:2 with lines lw 2 lc rgb "#FF0000" title "h = 1"
