@@ -1,49 +1,31 @@
-# Otimização Multidimensional Irrestrita em Fortran: Aclive Máximo vs Fletcher-Reeves
+# PPC 4: Otimização Multidimensional Topográfica
 
-Este projeto implementa e compara dois algoritmos clássicos de otimização irrestrita para encontrar o ponto máximo de uma função matemática de duas variáveis: $f(x,y)$. O código foi construído em Fortran e modularizado para evidenciar a arquitetura do método.
+## Sobre o Código
+O programa `PPC4.f90` tem um escopo de exploração e otimização. Ele projeta um algoritmo capaz de "subir" uma montanha matemática descrita pela função bidimensional $f(x,y)$, buscando encontrar, iterativamente, o ponto mais alto do terreno (o Ponto de Máximo Global).
 
-## A Função Objetivo
+O código é uma demonstração de força comparando duas inteligências de direção de passo: o método do **Aclive Máximo (Steepest Ascent)** e o algoritmo de **Fletcher-Reeves (Gradientes Conjugados)**.
 
-A "montanha" matemática que desejamos escalar é definida pela função:
+### Matemática Envolvida
+Independente do método de direção, toda Otimização Multidimensional segue a fórmula base iterativa:
+$$\vec{r}_{k+1} = \vec{r}_k + h^* \cdot \vec{d}_k$$
+- $\vec{r}_k$: Coordenadas atuais $(X, Y)$.
+- $\vec{d}_k$: O vetor Direção de busca.
+- $h^*$: O tamanho ideal do passo (o quão longe pular naquela direção).
 
-$$f(x,y) = 2xy + 2x - x^2 - 2y^2$$
+**1. O Vetor Direção ($\vec{d}_k$):**
+- **Aclive Máximo:** Sempre escolhe o vetor do Gradiente analítico ($\vec{\nabla}f$). Isso significa que o algoritmo aponta estritamente para a rampa mais íngreme naquele instante. Apesar de lógico, isso força o caminho a fazer curvas de 90 graus em vales, criando uma caminhada em "zigue-zague" extremamente devagar perto do cume.
+- **Fletcher-Reeves:** Acopla na equação do Gradiente um parâmetro de "Inércia" ($\beta$). Ele "lembra" o caminho da iteração passada e conjuga esse vetor antigo com a ladeira atual, "cortando caminho" nas curvas e atacando diretamente o centro da montanha.
 
-O ótimo analítico desta função encontra-se nas coordenadas **(2, 1)**. Iniciando no ponto **(-2, 3)**, testamos a eficiência de dois métodos numéricos distintos para alcançar o pico. O ponto foi escolhido de acordo com a atividade proposta para a Atividade Para Casa 4 (APC4), mas pode ser alterado facilmente.
+**2. A Busca Linear ($h^*$):**
+Uma vez escolhida a direção, para não dar um pulo no vazio ou além da montanha, o código precisa descobrir o passo ótimo ($h^*$). Isso é feito reaproveitando o **Método da Interpolação Quadrática** embutido dentro de uma sub-rotina do código: Ele cria uma parábola na linha da direção traçada, e define que o pulo exato vai terminar na coordenada X do vértice dessa parábola.
 
----
+### Entradas e Saídas
+- **Entradas (Menu Interativo):** O console solicitará que se digite `'1'` para rodar com o Aclive Máximo, ou `'2'` para Fletcher-Reeves.
+- **Entradas (Hardcoded):** Ponto inicial (Chute) $X = -2.0, Y = 3.0$. O método encerra quando o tamanho do vetor gradiente cair para $\approx 0$ (o terreno ficou perfeitamente plano - o cume).
+- **Saídas (Terminal):** Histórico da caminhada em colunas: Iteração, Erro, Pulo $h^*$, coordenadas atuais ($X, Y$) e os deltas.
+- **Saídas (Arquivos):** Grava a "Trilha" do algoritmo no arquivo log correspondente (`output1.dat` ou `output2.dat`). Além disso, varre e exporta também as curvas de nível da montanha inteira no arquivo `function.dat`.
 
-## O Motor Comum: Busca Linear
-
-Independentemente do método escolhido para decidir *para onde* ir, precisamos saber *o quanto* andar. Para isso, o código utiliza uma busca unidimensional (Busca Linear). 
-
-A cada iteração, avaliamos o terreno em três pontos ao longo da reta de direção escolhida, traçamos uma parábola virtual através deles e calculamos analiticamente o vértice dessa parábola ($h^*$). Isso garante que cada passo seja da magnitude ideal. Realizamos essa busca com o uso da interpolação quadrática, método utilizado em uma das atividades de sala recentes para encontrar o ponto otimizado de uma função de resistência elétrica.
-
----
-
-## Os Métodos Comparados
-
-### 1. O Método do Aclive Máximo (Steepest Ascent)
-**A Lógica:**
-É o método mais cru. A cada passo, o algoritmo calcula o gradiente ($\nabla f$) e vira exatamente para a direção da subida mais íngreme. 
-
-**O Desempenho:**
-É um método relativamente cego, já que a cada iteração, a nova direção de subida é ortogonal a anterior, realizando uma busca em **ziguezague**. Ele fica batendo nas laterais das curvas de nível, necessitando de uma quantidade significativa de iterações até chegar ao topo de $f(x,y)$. Note a quantidade de iterações é diretamente relacionada com a tolerância definida, com tolerâncias mais baixas resultando em resultados mais imprecisos, mas que convergem mais rápido. Em cinco iterações os valores já estavam próximos, mas para o valor utilizado no código anexado, mais 40 iterações foram realizadas até o ponto final. 
-
-### 2. O Método de Fletcher-Reeves (Gradientes Conjugados)
-**A Lógica:**
-É uma evolução inteligente do Aclive Máximo. O Fletcher-Reeves não olha apenas para o gradiente atual, ele carrega uma "memória" da inércia do passo anterior (através do parâmetro $\beta_k$). Isso permite que ele ajuste a trajetória, cortando caminho pelas diagonais da função em vez de virar abruptamente 90 graus.
-
-**O Desempenho:**
-Em funções puramente quadráticas (como a do nosso projeto), a teoria das Direções Conjugadas garante que o método encontrará a solução em no máximo $n$ passos, onde $n$ é o número de dimensões. Como o nosso problema tem duas variáveis (X e Y), o Fletcher-Reeves resolve em **apenas 2 iterações**, indo quase em linha reta para o topo (2, 1).
-
----
-
-## Estrutura dos Arquivos Gerados
-
-Após a execução, o programa Fortran exporta arquivos `.dat` estruturados nativamente para leitura por softwares de plotagem (como Gnuplot, Matplotlib/Python ou GNU Octave):
-
-* `function.dat`: Contém a malha tridimensional da topografia (curvas de nível).
-* `output1.dat`: Log completo com as 46 iterações do Aclive Máximo.
-* `output2.dat`: Log completo com as 2 iterações do Fletcher-Reeves.
-
-Ao plotar os dados em conjunto, a diferença de eficiência entre as trajetórias (Ziguezague vs Direto) fica visualmente clara sobre o mapa de calor. O mapa de calor anexado foi realizado com o Matplotlib, já que enfrentei problemas para fazer o código funcionar em gnuplot. Apesar de gostar mais do gnuplot, a criação de arquivos .dat e o uso de bibliotecas em python para a plotagem dos gráficos é altamente recomendada.
+### Gráficos (Python e Matplotlib)
+O script `graficos.py` importa todos esses dados para a biblioteca Matplotlib e desenha uma visualização topográfica esplêndida (`comparacao_matplotlib.png`):
+- Ele constrói uma visão superior da montanha (Curvas de Nível / Contour Map).
+- Ele plota, ponto a ponto, as linhas do caminho trilhado pela Inteligência de "Aclive Máximo" (em preto) contra a "Fletcher-Reeves" (em vermelho) partindo do ponto inicial $(-2, 3)$ em direção ao pico branco em $(2, 1)$, provando de forma esmagadora o traçado muito mais direto e eficiente do algoritmo dos Gradientes Conjugados.

@@ -107,19 +107,3 @@ program sala5
 
 end program sala5
 
-! ------------------------------------------------------------------------------------------------
-! Roteiro Sumário: Este programa resolve sistemas de equações lineares através da Fatoração LU.
-! Ao contrário de versões mais robustas, este código opera em precisão simples (32 bits) e
-! realiza uma validação por meio do cálculo de razão/erro relativo (matriz_LU / A). A decomposição
-! separa o sistema em uma matriz inferior (L) e superior (U), facilitando a resolução de AX = B.
-!
-! Aplicação: Solução de sistemas lineares de matrizes fixas com múltiplos vetores de termos
-! independentes. O uso de precisão simples o torna mais leve em termos de memória, porém
-! mais vulnerável a erros de arredondamento em sistemas matematicamente instáveis ou complexos.
-!
-! Inputs: n (ordem do sistema, fixado em 10), A (matriz quadrada de coeficientes do sistema)
-! e B (vetor de termos independentes).
-!
-! Outputs: Impressão da matriz A, o vetor solução X, as matrizes L e U resultantes, a
-! matriz de erro relativo calculada, e a prova real multiplicando A * X.
-! ------------------------------------------------------------------------------------------------

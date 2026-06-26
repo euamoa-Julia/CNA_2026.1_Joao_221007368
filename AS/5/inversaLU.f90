@@ -149,37 +149,3 @@ program sala5
 
 end program sala5
 
-! ------------------------------------------------------------------------------------------------
-! Roteiro Sumário: Este programa resolve sistemas de equações lineares através da Fatoração LU
-! e também calcula a Matriz Inversa (A^-1). A decomposição separa o sistema original em uma
-! matriz inferior (L) e superior (U). A inversa é obtida resolvendo-se o sistema n vezes,
-! utilizando as colunas da matriz identidade como vetores independentes.
-!
-! Aplicação: Solução de sistemas lineares e determinação de matrizes inversas em engenharia
-! e física. Extremamente eficiente, pois a parte computacionalmente cara (Fatoração) é feita
-! apenas uma vez, enquanto as múltiplas substituições progridem rapidamente.
-!
-! Inputs: n (ordem do sistema), A (matriz quadrada de coeficientes) e B (vetor de termos).
-!
-! Outputs: Vetor solução X, a Matriz Inversa calculada, e validações matemáticas comprobatórias,
-! incluindo a verificação de que A * A^-1 resulta na Matriz Identidade.
-! ------------------------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------------------------
-! COMO ADAPTAR ESTE CÓDIGO PARA OUTROS SISTEMAS LINEARES:
-! Para utilizar este método em matrizes ou problemas diferentes, siga os passos abaixo:
-!
-! 1. Alterar as Dimensões do Sistema: Atualize o valor da variável 'n' e redimensione
-!    todas as matrizes para (n, n) e os vetores para (n) no bloco de declarações.
-!
-! 2. Atualizar os Dados de Entrada: Substitua a matriz 'A' e o vetor 'B' pelos
-!    dados do seu problema.
-!
-! 3. Formatação Visual: As saídas no terminal estão usando o formato "10F8.X".
-!    Lembre-se de mudar o número '10' para a ordem 'n' do seu novo sistema para
-!    manter a formatação da tabela em tela.
-!
-! ATENÇÃO: Esta implementação utiliza a Fatoração LU sem pivotamento. O algoritmo
-! falhará se um elemento da diagonal principal se tornar zero. Utilize apenas para
-! matrizes estritamente diagonais dominantes ou definidas positivas.
-! ------------------------------------------------------------------------------------------------
