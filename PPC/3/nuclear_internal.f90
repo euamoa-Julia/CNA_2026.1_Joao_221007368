@@ -8,7 +8,7 @@ real(8) fo, bi, alpha                  ! Adimensionais (Fourier, Biot) e Difusiv
 real(8) k_therm, rho, cp_mat, h, l, t_inf, t_init, tempo_total, tempo_passado
 real(8) dt, dx                         ! Tamanho do passo de tempo e passo espacial
 real(8) q_dot, termo_A                 ! Geração de calor interna e termo modificado
-character (len=1) :: geracao           ! Entrada do usuário ("com" ou "sem")
+character (len=3) :: geracao           ! Entrada do usuário ("com" ou "sem")
 
 logical :: entrada_valida ! Variável lógica para controle do menu interativo
 

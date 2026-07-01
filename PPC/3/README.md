@@ -21,6 +21,6 @@ $$\frac{\partial^2 T}{\partial x^2} + \frac{\dot{q}}{k} = \frac{1}{\alpha} \frac
 - **Saídas (Arquivos):** Grava um arquivo formatado no estilo Tabela (`linhas.dat`) e um arquivo para mapas topográficos (`mapa.dat`).
 
 ### Gráficos
-O script `graficos.gnu` compila esses dados de saída em dois excelentes modos de visualização:
+O script `plot_reactor.gp` compila esses dados de saída em dois excelentes modos de visualização:
 - **`curvas.png`:** Um gráfico de linhas comum 2D onde o Eixo X é o tempo e as linhas coloridas representam a evolução térmica isolada de cada um dos 7 nós (do centro quente até a borda resfriada).
 - **`campo.png`:** Utiliza o comando `pm3d map` para projetar uma vista superior do reator. O eixo Y é o tempo, o Eixo X é o espaço na espessura da parede, e a terceira dimensão (Temperatura) vira um **Mapa de Cores** contínuo (De Azul escuro a Vermelho Brilhante).
